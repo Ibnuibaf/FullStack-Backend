@@ -56,7 +56,8 @@ export const loginUser = async (req, res) => {
         .status(HTTPStatus.ClientError)
         .send({ success: false, message: "User not found, Register User" });
     }
-    if (!bcrypt.compare(password, user.password)) {
+    const isPassowrdMatch=await bcrypt.compare(password, user.password)
+    if (!isPassowrdMatch) {
       return res
         .status(HTTPStatus.ClientError)
         .send({ success: false, message: "Wrong user password, Try again" });
@@ -68,7 +69,7 @@ export const loginUser = async (req, res) => {
     res
       .status(HTTPStatus.Success)
       .cookie("token", token)
-      .send({ success: true, message: "User Logged In successfully" });
+      .send({ success: true, message: "User Logged In successfully", token });
   } catch (error) {
     console.log(error);
     res
@@ -80,8 +81,10 @@ export const loginUser = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const { token } = req.cookies;
+    console.log("token from Controller",token);
     const tokenDetails = JWT.verify(token, process.env.JWT_SECRET_ID);
     const user = await Users.findById(tokenDetails._id, { password: 0 });
+    console.log(user);
     res
       .status(HTTPStatus.Success)
       .send({ success: true, message: "User data fetched", user });
