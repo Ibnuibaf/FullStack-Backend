@@ -2,10 +2,10 @@ import HTTPStatus from "../constants/httpStatus.constant.js";
 import { emailRegex, passwordRegex } from "../constants/user.constant.js";
 import Users from "../models/users.model.js";
 import bcrypt from "bcrypt";
-import dotenv from 'dotenv'
+import dotenv from "dotenv";
 import JWT from "jsonwebtoken";
 
-dotenv.config()
+dotenv.config();
 
 export const registerUser = async (req, res) => {
   try {
@@ -33,7 +33,7 @@ export const registerUser = async (req, res) => {
         .status(HTTPStatus.ClientError)
         .send({ success: false, message: "Provide valid role for the user" });
     }
-    const encryptedPassword = bcrypt.hash(password, 10);
+    const encryptedPassword =await bcrypt.hash(password, 10);
     await Users.create({ email, password: encryptedPassword, role });
     res.status(HTTPStatus.Success).send({
       success: true,
@@ -61,7 +61,10 @@ export const loginUser = async (req, res) => {
         .status(HTTPStatus.ClientError)
         .send({ success: false, message: "Wrong user password, Try again" });
     }
-    const token = JWT.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET_ID);
+    const token = JWT.sign(
+      { _id: user._id, role: user.role },
+      process.env.JWT_SECRET_ID
+    );
     res
       .status(HTTPStatus.Success)
       .cookie("token", token)
@@ -76,10 +79,26 @@ export const loginUser = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    const {token}=req.cookies
-    const tokenDetails=JWT.verify(token,process.env.JWT_SECRET_ID)
-    const user=await Users.findById(tokenDetails._id,{password:0})
-    res.status(HTTPStatus.Success).send({success:true,message:"User data fetched", user})
+    const { token } = req.cookies;
+    const tokenDetails = JWT.verify(token, process.env.JWT_SECRET_ID);
+    const user = await Users.findById(tokenDetails._id, { password: 0 });
+    res
+      .status(HTTPStatus.Success)
+      .send({ success: true, message: "User data fetched", user });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(HTTPStatus.ServerError)
+      .send({ success: false, message: error.message });
+  }
+};
+
+export const logoutUser = (req, res) => {
+  try {
+    res
+      .status(HTTPStatus.Success)
+      .clearCookie("token")
+      .send({ success: true, message: "Logout successful" });
   } catch (error) {
     console.log(error);
     res
