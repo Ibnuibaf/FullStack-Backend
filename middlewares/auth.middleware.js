@@ -15,7 +15,7 @@ export const adminAuth = async (req, res, next) => {
     const { _id, role } = JWT.verify(token, process.env.JWT_SECRET_ID);
     const user = await Users.findById(_id);
     if (!user) {
-      return res.status(HTTPStatus.ClientError).clearCookie("token").send({
+      return res.status(HTTPStatus.ClientError).send({
         success: false,
         message: "User details not found, Try again after login",
       });
@@ -47,7 +47,7 @@ export const isLoggedIn = async (req, res, next) => {
     const { _id, role } = JWT.verify(token, process.env.JWT_SECRET_ID);
     const user = await Users.findById(_id);
     if (!user) {
-      return res.status(HTTPStatus.ClientError).clearCookie("token").send({
+      return res.status(HTTPStatus.ClientError).send({
         success: false,
         message: "User details not found, Try again after login",
       });

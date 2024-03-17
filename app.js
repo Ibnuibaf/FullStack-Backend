@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import cookieParser from "cookie-parser";
 import connectDB from "./configs/DB.js";
 import logger from "morgan";
 import { fetchAndStoreData } from "./utils/mockApi.js";
@@ -18,7 +17,6 @@ app.use(
     credentials: true,
   })
 );
-app.use(cookieParser());
 
 app.use("/api/user/", userRouter);
 app.use("/api/product/", productRouter);

@@ -68,7 +68,6 @@ export const loginUser = async (req, res) => {
     );
     res
       .status(HTTPStatus.Success)
-      .cookie("token", token)
       .send({ success: true, message: "User Logged In successfully", token });
   } catch (error) {
     console.log(error);
@@ -98,7 +97,6 @@ export const logoutUser = (req, res) => {
   try {
     res
       .status(HTTPStatus.Success)
-      .clearCookie("token")
       .send({ success: true, message: "Logout successful" });
   } catch (error) {
     console.log(error);
