@@ -80,7 +80,7 @@ export const loginUser = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    const { token } = req.cookies;
+    const token= req.headers["authorization"];
     const tokenDetails = JWT.verify(token, process.env.JWT_SECRET_ID);
     const user = await Users.findById(tokenDetails._id, { password: 0 });
     res

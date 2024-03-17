@@ -9,7 +9,7 @@ dotenv.config();
 
 export const getReviews = async (req, res) => {
   try {
-    const { token } = req.cookies;
+    const token= req.headers["authorization"];
     const { _id, role } = JWT.verify(token, process.env.JWT_SECRET_ID);
     let reviews = [];
     if (role == "team member") {
@@ -34,7 +34,7 @@ export const getReviews = async (req, res) => {
 
 export const getReviewAnalytics = async (req, res) => {
   try {
-    const { token } = req.cookies;
+    const token= req.headers["authorization"];
     // const { _id, role } = JWT.verify(token, process.env.JWT_SECRET_ID);
     let analitics = [];
     // if (role == "team member") {
@@ -71,7 +71,7 @@ export const addReview = async (req, res) => {
       department,
       id,
     } = req.body;
-    const { token } = req.cookies;
+    const token= req.headers["authorization"];
     const { _id } = JWT.verify(token, process.env.JWT_SECRET_ID);
     const product = await Products.findById(productId);
     if (!product) {

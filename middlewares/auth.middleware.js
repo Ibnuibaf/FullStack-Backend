@@ -5,7 +5,7 @@ import HTTPStatus from "../constants/httpStatus.constant.js";
 dotenv.config();
 export const adminAuth = async (req, res, next) => {
   try {
-    const { token } = req.cookies;
+    const token= req.headers["authorization"];
     if (!token) {
       return res.status(HTTPStatus.ClientError).send({
         success: false,
@@ -37,7 +37,7 @@ export const adminAuth = async (req, res, next) => {
 
 export const isLoggedIn = async (req, res, next) => {
   try {
-    const { token } = req.cookies;
+    const token= req.headers["authorization"];
     if (!token) {
       return res.status(HTTPStatus.ClientError).send({
         success: false,
@@ -69,7 +69,7 @@ export const isLoggedIn = async (req, res, next) => {
 
 export const isNotLoggedIn = (req, res, next) => {
   try {
-    const { token } = req.cookies;
+    const token= req.headers["authorization"];
     if (token) {
       return res.status(HTTPStatus.ClientError).send({
         success: false,
