@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
 app.use(
   cors({
-    origin: "https://full-stack-frontend-pied.vercel.app/",
+    origin: "*",
     credentials: true,
   })
 );
