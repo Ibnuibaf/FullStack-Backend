@@ -81,10 +81,8 @@ export const loginUser = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const { token } = req.cookies;
-    console.log("token from Controller",token);
     const tokenDetails = JWT.verify(token, process.env.JWT_SECRET_ID);
     const user = await Users.findById(tokenDetails._id, { password: 0 });
-    console.log(user);
     res
       .status(HTTPStatus.Success)
       .send({ success: true, message: "User data fetched", user });

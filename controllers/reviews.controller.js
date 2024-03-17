@@ -17,7 +17,7 @@ export const getReviews = async (req, res) => {
         .populate("author", "_id email")
         .populate("product");
     } else if (role == "admin") {
-      reviews = await Reviews.find()
+      reviews = await Reviews.find({status:"pending"})
         .populate("author", "_id email")
         .populate("product");
     }
