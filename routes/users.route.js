@@ -24,10 +24,5 @@ userRouter.post(
   (req, res, next) => isNotLoggedIn(req, res, next),
   (req, res) => loginUser(req, res)
 );
-userRouter.get(
-  "/logout",
-  (req, res, next) => isLoggedIn(req, res, next),
-  (req, res) => logoutUser(req, res)
-);
 
 export default userRouter;

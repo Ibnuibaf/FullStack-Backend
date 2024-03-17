@@ -92,16 +92,3 @@ export const getUser = async (req, res) => {
       .send({ success: false, message: error.message });
   }
 };
-
-export const logoutUser = (req, res) => {
-  try {
-    res
-      .status(HTTPStatus.Success)
-      .send({ success: true, message: "Logout successful" });
-  } catch (error) {
-    console.log(error);
-    res
-      .status(HTTPStatus.ServerError)
-      .send({ success: false, message: error.message });
-  }
-};
