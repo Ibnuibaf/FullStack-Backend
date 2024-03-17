@@ -18,7 +18,7 @@ export const getProducts = async (req, res) => {
 
 export const updateProducts = async (req, res) => {
   try {
-    const {
+    let {
       productName,
       price,
       image,
