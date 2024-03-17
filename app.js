@@ -14,8 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
 app.use(
   cors({
-    origin: "*",
-    // credentials: true,
+    origin: "https://full-stack-frontend-pied.vercel.app",
+    credentials: true,
   })
 );
 app.use(cookieParser());
