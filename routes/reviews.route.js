@@ -2,6 +2,7 @@ import express from "express";
 import {
   addReview,
   changeReviewStatus,
+  getReviewAnalytics,
   getReviews,
 } from "../controllers/reviews.controller.js";
 import upload from "../middlewares/multer.middleware.js";
@@ -24,6 +25,11 @@ reviewRouter.patch(
   "/status",
   (req, res, next) => adminAuth(req, res, next),
   (req, res) => changeReviewStatus(req, res)
+);
+reviewRouter.get(
+  "/analitics",
+  (req, res, next) => isLoggedIn(req, res, next),
+  (req, res) => getReviewAnalytics(req, res)
 );
 
 export default reviewRouter;

@@ -17,13 +17,41 @@ export const getReviews = async (req, res) => {
         .populate("author", "_id email")
         .populate("product");
     } else if (role == "admin") {
-      reviews = await Reviews.find({status:"pending"})
+      reviews = await Reviews.find({ status: "pending" })
         .populate("author", "_id email")
         .populate("product");
     }
     res
       .status(HTTPStatus.Success)
       .send({ success: true, message: "Fetched all reviews", reviews });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(HTTPStatus.ServerError)
+      .send({ success: false, message: error.message });
+  }
+};
+
+export const getReviewAnalytics = async (req, res) => {
+  try {
+    const { token } = req.cookies;
+    // const { _id, role } = JWT.verify(token, process.env.JWT_SECRET_ID);
+    let analitics = [];
+    // if (role == "team member") {
+    // analitics = await Reviews.aggregate([
+    // { $match: { author: _id } },
+    // { $group: { _id: "$status", count: { $sum: 1 } } },
+    // { $project: { _id: 0, status: "$_id", count: 1 } }
+    // ]);
+    // } else if (role == "admin") {
+    analitics = await Reviews.aggregate([
+      { $group: { _id: "$status", count: { $sum: 1 } } },
+      { $project: { _id: 0, status: "$_id", count: 1 } },
+    ]);
+    // }
+    res
+      .status(HTTPStatus.Success)
+      .send({ success: true, message: "Fetched analitics", analitics });
   } catch (error) {
     console.log(error);
     res
@@ -56,8 +84,8 @@ export const addReview = async (req, res) => {
       const response = await uploadImageToCloud(req.file);
       if (response.isError) {
         return res
-        .status(HTTPStatus.ServerError)
-        .send({ success: false, message: response.message });
+          .status(HTTPStatus.ServerError)
+          .send({ success: false, message: response.message });
       }
       console.log("Reached here file upload");
       image = response.secure_url;
@@ -75,7 +103,9 @@ export const addReview = async (req, res) => {
         id,
       },
     });
-    res.status(HTTPStatus.Success).send({success:true,message:"Added review as pending"})
+    res
+      .status(HTTPStatus.Success)
+      .send({ success: true, message: "Added review as pending" });
   } catch (error) {
     console.log(error);
     res
