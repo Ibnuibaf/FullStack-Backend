@@ -24,7 +24,7 @@ app.use("/api/user/", userRouter);
 app.use("/api/product/", productRouter);
 app.use("/api/review/", reviewRouter);
 
-app.listen(3000, async () => {
+app.listen(10000, async () => {
   console.log("Server starting on http://localhost:10000");
   await connectDB();
   // await fetchAndStoreData()
